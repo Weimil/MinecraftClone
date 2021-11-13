@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Scenes.Scripts.Player
@@ -8,10 +9,10 @@ namespace Scenes.Scripts.Player
         [SerializeField] private float fMovementSpeed = 7.5f;
         [SerializeField] private float fRunMultiplier = 1.75f;
         [SerializeField] private float fJumpPower = 4f;
-        [SerializeField] private float fFallModifier = 10f;
-
-        private float fFallSpeed;
+        [SerializeField] private float fFallModifier = 15f;
+        
         private CharacterController characterController;
+        private float fFallSpeed;
     
         private void Start()
         {
@@ -22,17 +23,18 @@ namespace Scenes.Scripts.Player
         private void Update()
         {
             // TODO: Normalize movement.
-            // Rn the usage of Vector3.Normalize(move) when instancing it is slow af,
-            // but normalizing it after multiplying if by fMovementSpeed doesn't work as intended.
+            // Rn the usage of Vector3.Normalize(v3Move) is slow af.
+            // 2021-11-10 Vector3.Normalize(v3Move) in unusable.
             
-            float fHorizontalMovement = Input.GetAxis("Horizontal");
-            float fVerticalMovement = Input.GetAxis("Vertical");
-
-            Vector3 move = new Vector3(fHorizontalMovement, 0, fVerticalMovement) * Time.deltaTime * fMovementSpeed;
+            Vector3 v3Move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")); 
+            
+            //v3Move = Vector3.Normalize(v3Move);
 
             if (Input.GetKey(KeyCode.LeftControl))
-                move *= fRunMultiplier;
-
+                v3Move *= Time.deltaTime * fMovementSpeed * fRunMultiplier;
+            else
+                v3Move *= Time.deltaTime * fMovementSpeed;
+            
             // TODO: Custom isGrounded
             // characterController.isGrounded is not working properly, and gives out false positives.
             
@@ -41,7 +43,7 @@ namespace Scenes.Scripts.Player
                 fFallSpeed += fFallModifier * Time.deltaTime;
                 characterController.stepOffset = 0f;
             }
-            else if (characterController.isGrounded && Input.GetKey(KeyCode.Space))
+            else if (Input.GetKey(KeyCode.Space))
             {
                 fFallSpeed = -fJumpPower;
             }
@@ -50,13 +52,22 @@ namespace Scenes.Scripts.Player
                 characterController.stepOffset = 0.5f;
                 fFallSpeed = 0;
             }
-
-            move.y = -fFallSpeed * Time.deltaTime;
+            v3Move.y = -fFallSpeed * Time.deltaTime;
             
-            characterController.Move(transform.TransformVector(move));
+            characterController.Move(transform.TransformVector(v3Move));
+            
+            CheckDeath();
+        }
 
+        private void CheckDeath()
+        {
             if (characterController.transform.position.y < 0)
                 characterController.transform.position = new Vector3(0, 5, 0);
+        }
+
+        private bool IsGrounded()
+        {
+            return Physics.Raycast(transform.position,-transform.up,1);
         }
     }
 }

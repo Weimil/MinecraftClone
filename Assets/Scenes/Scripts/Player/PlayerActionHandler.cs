@@ -4,35 +4,61 @@ namespace Scenes.Scripts.Player
 {
     public class PlayerActionHandler : MonoBehaviour
     {
-        [SerializeField] private float fReach = 7.5f;
-
-        private CharacterController characterController;
+        [SerializeField] private float fMaxReachDistance = 7.5f;
+                         private float fBlockBreakingCooldown = .01f;
         
-        private void Start()
-        {
-            characterController = GetComponent<CharacterController>();
-        }
-
         private void Update()
         {
-            RaycastHit hit;
-            //TODO: Origin from eyes.
-            //Origin should be from the position of the eyes.
-            Ray ray = new Ray(characterController.transform.position,Vector3.forward);
-            if (Physics.Raycast(ray, out hit, fReach))
+            DebugRaycast();
+            HighlightBlock();
+            if (Input.GetMouseButton(0))
             {
-                if (hit.transform.CompareTag("Block"))
+                if (fBlockBreakingCooldown == 0)
                 {
-                    /*
-                     * block.highlight
-                     */
-                }
+                    BreakBlock();
 
-                if (hit.transform.CompareTag("Mob"))
+                }
+            }
+
+            fBlockBreakingCooldown = fBlockBreakingCooldown > 0 ? fBlockBreakingCooldown - Time.deltaTime : 0; 
+            Debug.Log(fBlockBreakingCooldown);
+        }
+
+        private void BreakBlock()
+        {
+            RaycastHit hitInfo;
+            Ray ray = new Ray(transform.position,transform.forward);
+            if (Physics.Raycast(ray, out hitInfo, fMaxReachDistance))
+            {
+                if (hitInfo.transform.CompareTag("Block"))
                 {
-                    /*
-                     * Mob.hit(intemInHand)
-                     */
+                    hitInfo.transform.gameObject.SendMessage("goBreak");
+                    fBlockBreakingCooldown = .01f;
+                }
+            }
+        }
+        private void DebugRaycast()
+        {
+            RaycastHit hitInfo;
+            Ray ray = new Ray(transform.position,transform.forward);
+            if (Physics.Raycast(ray, out hitInfo, fMaxReachDistance))
+            {
+                Debug.DrawLine(ray.origin,hitInfo.point,Color.red);
+            }
+            else
+            {
+                Debug.DrawLine(ray.origin, ray.origin + ray.direction * fMaxReachDistance,Color.green);
+            }
+        }
+        private void HighlightBlock()
+        {
+            RaycastHit hitInfo;
+            Ray ray = new Ray(transform.position,transform.forward);
+            if (Physics.Raycast(ray, out hitInfo, fMaxReachDistance))
+            {
+                if (hitInfo.transform.CompareTag("Block"))
+                {
+                    hitInfo.transform.gameObject.SendMessage("goHighlight");
                 }
             }
         }
