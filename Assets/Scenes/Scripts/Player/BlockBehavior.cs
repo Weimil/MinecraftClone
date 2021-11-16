@@ -1,12 +1,15 @@
 using UnityEngine;
 public class BlockBehavior : MonoBehaviour
 {
-    public void goHighlight()
+    private void goHighLight()
     {
         GetComponent<Renderer>().material.color = Color.black;
     }
-    
-    public void goBreak()
+    private void goUnHighLight()
+    {
+        GetComponent<Renderer>().material.color = Color.white;
+    }
+    private void goBreak()
     {
         Destroy(gameObject);
     }
