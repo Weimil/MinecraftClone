@@ -5,8 +5,7 @@ namespace Scenes.Scripts.Player
     public class RotationY : MonoBehaviour
     {
         [SerializeField] private float fRotationY = 500.0f;
-
-        private CharacterController characterController;
+        /*    (0_0)   */ private CharacterController characterController;
         private void Start()
         {
             characterController = GetComponent<CharacterController>();

@@ -6,13 +6,12 @@ namespace Scenes.Scripts.Player
     [RequireComponent(typeof(CharacterController))]
     public class Movement : MonoBehaviour
     {
-        [SerializeField] private float fMovementSpeed = 7.5f;
+        [SerializeField] private float fMovementSpeed = 5f;
         [SerializeField] private float fRunMultiplier = 1.75f;
-        [SerializeField] private float fJumpPower = 4f;
+        [SerializeField] private float fJumpPower = 3f;
         [SerializeField] private float fFallModifier = 15f;
-        
-        private CharacterController characterController;
-        private float fFallSpeed;
+        /*    (0_0)   */ private CharacterController characterController;
+        /*    (0_0)   */ private float fFallSpeed;
     
         private void Start()
         {
@@ -55,19 +54,20 @@ namespace Scenes.Scripts.Player
             v3Move.y = -fFallSpeed * Time.deltaTime;
             
             characterController.Move(transform.TransformVector(v3Move));
-            
-            CheckDeath();
+
+            Respawn();
         }
 
-        private void CheckDeath()
+
+        private void Update1()
+        {
+            
+        }
+
+        private void Respawn()
         {
             if (characterController.transform.position.y < 0)
                 characterController.transform.position = new Vector3(0, 5, 0);
-        }
-
-        private bool IsGrounded()
-        {
-            return Physics.Raycast(transform.position,-transform.up,1);
         }
     }
 }
