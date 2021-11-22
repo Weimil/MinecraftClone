@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Scenes.Scripts.Player
+namespace Player
 {
     public class RotationX : MonoBehaviour
     {

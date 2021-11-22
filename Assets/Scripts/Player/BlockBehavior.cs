@@ -1,16 +1,20 @@
 using UnityEngine;
-public class BlockBehavior : MonoBehaviour
+
+namespace Player
 {
-    private void goHighLight()
+    public class BlockBehavior : MonoBehaviour
     {
-        GetComponent<Renderer>().material.color = Color.black;
-    }
-    private void goUnHighLight()
-    {
-        GetComponent<Renderer>().material.color = Color.white;
-    }
-    private void goBreak()
-    {
-        Destroy(gameObject);
+        private void goHighLight()
+        {
+            GetComponent<Renderer>().material.color = Color.black;
+        }
+        private void goUnHighLight()
+        {
+            GetComponent<Renderer>().material.color = Color.white;
+        }
+        private void goBreak()
+        {
+            Destroy(gameObject);
+        }
     }
 }
