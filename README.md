@@ -1,3 +1,15 @@
+# About
+
+## 
+
+# RoadMap
+
+Some features I want to add 
+
+[ ]  Hola
+
+
+
 Classes
 	- GlobalVariables // Clase en la que es definiran valors per a moltes clases amb el 
 						unic objectiu de que siga mes facil de editar eixes propietats

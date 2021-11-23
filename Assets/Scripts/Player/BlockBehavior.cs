@@ -4,15 +4,15 @@ namespace Player
 {
     public class BlockBehavior : MonoBehaviour
     {
-        private void goHighLight()
+        public void HighLight()
         {
             GetComponent<Renderer>().material.color = Color.black;
         }
-        private void goUnHighLight()
+        public void UnHighLight()
         {
             GetComponent<Renderer>().material.color = Color.white;
         }
-        private void goBreak()
+        public void Break()
         {
             Destroy(gameObject);
         }
