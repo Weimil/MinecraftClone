@@ -45287,8 +45287,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fMovementSpeed: 5
   fRunMultiplier: 1.75
-  fJumpPower: 3
-  fFallModifier: 15
+  fJumpPower: 3.5
+  fFallModifier: 13
 --- !u!143 &837982585
 CharacterController:
   m_ObjectHideFlags: 0
@@ -45300,7 +45300,7 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 0.9
+  m_Height: 0.84
   m_Radius: 0.4
   m_SlopeLimit: 0
   m_StepOffset: 0.5

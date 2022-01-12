@@ -22,6 +22,16 @@ namespace Player
         
         private void Update()
         {
+            
+            // TODO : Coyote Time
+            // https://www.youtube.com/watch?v=qf9vq-ru2Ks
+            // TODO : Inertia
+            // Player have Inertia in the air and if the player have jumped will continue moving although v3Move may be  (0, 0, 0) 
+            // TODO : Custom isGrounded
+            // Create an isGrounded method using a raycast
+            // TODO : FIX Diagonal movement
+            // It can be fixed by using the method Normalize from Vector3 but it do not work as intended
+            
             v3Move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             
             if (!characterController.isGrounded)
@@ -49,6 +59,11 @@ namespace Player
             v3Move.y = -fFallSpeed * Time.deltaTime;
             
             characterController.Move(transform.TransformVector(v3Move));
+
+            characterController.transform.position = 
+                characterController.transform.position.y < 0
+                ? new Vector3(0, 5, 0)
+                : characterController.transform.position;
         }
     }
 }
