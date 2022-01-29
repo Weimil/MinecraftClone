@@ -1,39 +1,77 @@
 using System;
+using System.Collections.Generic;
+using Level.ChunkStuff;
 using Level.RegionStuff;
 using UnityEngine;
+using Utils;
 using Random = System.Random;
 
 namespace Level.WorldStuff
 {
     public class World : MonoBehaviour
     {
-        private Region[,] _regions;
-        public static readonly int seed = 0;
-        public static Random Random = new Random(seed);
-        
+        public static int Seed;
+        public static Random Random;
+        public Chunk _chunkPrefab;
+        public Region _regionPrefab;
+        [SerializeField] private int manualSeed;
+        private Dictionary<Vector2, Region> RegionDictionary { get; set; }
+        private Region[,] Regions { get; set; }
+
         private void Start()
         {
-            /*
-            _regions = new Region[2, 2];
+            Init();
+            StartGen();
+            StartRendering();
+        }
 
-            for (int x = 0; x < _regions.GetLength(0); x++)
+        private void Init()
+        {
+            Seed = manualSeed;
+            Random = new Random(Seed);
+            Regions = new Region[2,2];
+        }
+
+        private void StartGen()
+        {
+            for (int x = 0; x < Regions.GetLength(0); x++)
+            for (int z = 0; z < Regions.GetLength(1); z++)
             {
-                for (int z = 0; z < _regions.GetLength(1); z++)
-                {
-                    Region region = Instantiate(new GameObject(), new Vector3(16, 0, 16), Quaternion.identity);
-                    GameObject tmp1 = new GameObject();
-                    tmp1.AddComponent<Region>();
-                    _regions[x, z] = tmp1;
-                    GameObject gameObject = new GameObject("region", typeof(Region));
-                }
+                Region region = Instantiate(
+                    _regionPrefab,
+                    MathW.RegionSpawnCords(x, z, RegionStatics.RegionSizeInBlocks),
+                    Quaternion.identity,
+                    gameObject.transform
+                );
+                int nX = MathW.RegionCoord(x);
+                int nZ = MathW.RegionCoord(z);
+                region.name = $"Region[{nX}|{nZ}]";
+                region.GetComponent<Region>().Init(new Vector2(x, z), _chunkPrefab);
+                //Debug.Log("R|" + x + "|" + z + "|");
+                Regions[x, z] = region;
             }
+        }
 
-            _regions[x, z];
-            _regions[0, 0] = new Region(new Vector2(1,1), new Vector3(16,0,16));
-            _regions[1, 0] = new Region(new Vector2(-1,1), new Vector3(-16,0,16));
-            _regions[0, 1] = new Region(new Vector2(1,-1), new Vector3(16,0,-16));
-            _regions[1, 1] = new Region(new Vector2(-1,-1), new Vector3(-16,0,-16));
-            */
+        private void StartRendering()
+        {
+            foreach (Region region in Regions)
+            foreach (Chunk chunk in region.Chunks)
+                chunk.Render();
+        }
+        
+        public Chunk GetChunk(int x, int y)
+        {
+            Debug.LogError("X: " + x + " Y: " + y);
+            int size = RegionStatics.RegionSizeInChunks;
+            int numRegions = size * Regions.GetLength(0);
+
+            int checkX = Math.Abs(x);
+            int checkY = Math.Abs(x);
+            
+            if (checkX < numRegions &&
+                checkY < numRegions)
+                return Regions[checkX / size, checkY / size].Chunks[checkX % size, checkY % size];
+            return null;
         }
     }
 }

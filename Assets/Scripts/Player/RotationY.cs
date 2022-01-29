@@ -4,18 +4,19 @@ namespace Player
 {
     public class RotationY : MonoBehaviour
     {
-        [SerializeField] private float fRotationY = 500.0f;
-        /*    (0_0)   */ private CharacterController characterController;
+        [SerializeField] private float rotationY = 500.0f;
+        private CharacterController _characterController;
+
         private void Start()
         {
-            characterController = GetComponent<CharacterController>();
+            _characterController = GetComponent<CharacterController>();
         }
 
         private void Update()
         {
-            float fMouseY = Input.GetAxis("Mouse X");
-            
-            characterController.transform.Rotate(new Vector3(0f,fMouseY,0f) * Time.deltaTime * fRotationY);
+            float mouseY = Input.GetAxis("Mouse X");
+
+            _characterController.transform.Rotate(new Vector3(0f, mouseY, 0f) * Time.deltaTime * rotationY);
         }
     }
 }

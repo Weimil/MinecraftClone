@@ -4,47 +4,47 @@ namespace Player
 {
     public class ActionHandler : MonoBehaviour
     {
-        [SerializeField] private float fMaxReachDistance = 7.5f;
-        [SerializeField] private float fBlockBreakingCooldown = .01f;
-        /*    (0_0)   */ private GameObject hitOld;
+        [SerializeField] private float reachDistance = 7.5f;
+        [SerializeField] private float breakingCooldown = .01f;
+        private GameObject _hitOld;
 
         private void Update()
         {
             RaycastHit hit;
             if (Physics.Raycast(
-                GetComponentInChildren<RotationX>().Position(), 
-                GetComponentInChildren<RotationX>().LookingAt(), 
-                out hit, fMaxReachDistance)
+                GetComponentInChildren<RotationX>().Position(),
+                GetComponentInChildren<RotationX>().LookingAt(),
+                out hit, reachDistance)
             )
             {
                 if (hit.transform.CompareTag("Block"))
                 {
                     hit.transform.GetComponent<BlockBehavior>().HighLight();
 
-                    if (hitOld != null && hit.transform.gameObject != hitOld)
-                        hitOld.GetComponent<BlockBehavior>().UnHighLight();
-                        
-                    if (Input.GetMouseButton(0) && fBlockBreakingCooldown == 0)
+                    if (_hitOld != null && hit.transform.gameObject != _hitOld)
+                        _hitOld.GetComponent<BlockBehavior>().UnHighLight();
+
+                    if (Input.GetMouseButton(0) && breakingCooldown == 0)
                     {
                         hit.transform.GetComponent<BlockBehavior>().Break();
-                        fBlockBreakingCooldown = .03f;
+                        breakingCooldown = .03f;
                     }
-                        
-                    hitOld = hit.transform.gameObject;
+
+                    _hitOld = hit.transform.gameObject;
                 }
                 else
                 {
-                    if (hitOld != null)
-                        hitOld.GetComponent<BlockBehavior>().UnHighLight();
+                    if (_hitOld != null)
+                        _hitOld.GetComponent<BlockBehavior>().UnHighLight();
                 }
             }
             else
             {
-                if (hitOld != null)
-                    hitOld.GetComponent<BlockBehavior>().UnHighLight();
+                if (_hitOld != null)
+                    _hitOld.GetComponent<BlockBehavior>().UnHighLight();
             }
-            
-            fBlockBreakingCooldown = fBlockBreakingCooldown > 0 ? fBlockBreakingCooldown - Time.deltaTime : 0; 
+
+            breakingCooldown = breakingCooldown > 0 ? breakingCooldown - Time.deltaTime : 0;
         }
     }
 }

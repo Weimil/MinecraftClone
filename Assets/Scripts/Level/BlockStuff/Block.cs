@@ -5,34 +5,32 @@ namespace Level.BlockStuff
 {
     public class Block
     {
-        private string _name;
-        private MeshType _meshType;
-        private Material _material;
-        private int _textureMapIndex;
-        
         public Block(string name, MeshType meshType, Material material, int textureMapIndex)
         {
-            _name = name;
-            _meshType = meshType;
-            _material = material;
-            _textureMapIndex = textureMapIndex;
+            Name = name;
+            MeshType = meshType;
+            Material = material;
+            TextureMapIndex = textureMapIndex;
         }
-        
-        public string Name
+
+        public string Name 
         {
-            get { return _name; }
+            get;
         }
-        public MeshType MeshType
+
+        public MeshType MeshType 
         {
-            get { return _meshType; } 
+            get;
         }
-        public Material Material
+
+        public Material Material 
         {
-            get { return _material; } 
+            get;
         }
-        public int TextureMapIndex
+
+        public int TextureMapIndex 
         {
-            get { return _textureMapIndex; }
+            get;
         }
     }
 }

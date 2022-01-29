@@ -1,49 +1,46 @@
 using Level.ChunkStuff;
 using UnityEngine;
+using Utils;
 
 namespace Level.RegionStuff
 {
     public class Region : MonoBehaviour
     {
-        private Vector2 _id;
+        private Chunk _chunkPrefab;
+        public Chunk[,] Chunks { get; set; }
         private Vector3 _position;
-        private Chunk[,] _chunks;
+        private Vector2 _id;
 
-        public Region(Vector2 id, Vector3 position)
+        public void Init(Vector2 id, Chunk chunkPrefab)
         {
-            _chunks = new Chunk[2, 2];
-
-            _chunks[0, 0] = new Chunk(new Vector3(16,0,16));
-            _chunks[1, 0] = new Chunk(new Vector3(-16,0,16));
-            _chunks[0, 1] = new Chunk(new Vector3(16,0,-16));
-            _chunks[1, 1] = new Chunk(new Vector3(-16,0,-16));
-
-            
             _id = id;
-            _position = position;
+            _position = transform.position;
+            _chunkPrefab = chunkPrefab;
             
-            /*
-            _id = new Vector2(
-                (int) id.x % 2 == 1 ? id.x / 2 : id.x / 2 * -1,
-                (int) id.y % 2 == 1 ? id.y / 2 : id.y / 2 * -1
-            );
+            // 15 - 5M
+            // 14 - 4M
+            // 13 - 3M
+            // 12 - 1M
+            // 11 - 500K
             
-            _position = new Vector3(
-                _id.x * RegionStatics.RegionSizeInBlocks, 
-                0, 
-                _id.y
-            );
-            */
+            Chunks = new Chunk[RegionStatics.RegionSizeInChunks, RegionStatics.RegionSizeInChunks];
 
-        }
-
-        private void InitVariables(Vector2 id)
-        {
-            _id.x = (int) id.x % 2 == 1 ? id.x / 2 : id.x / 2 * -1;
-            _id.y = (int) id.y % 2 == 1 ? id.y / 2 : id.y / 2 * -1;
-            // Instantiate Region in coords pos
-
-
+            for (int x = 0; x < Chunks.GetLength(0); x++)
+            for (int z = 0; z < Chunks.GetLength(1); z++)
+            {
+                Chunk chunk = Instantiate(
+                    _chunkPrefab,
+                    MathW.ChunkSpawnCords(x, z, _position - Vector3.one * ChunkStatics.ChunkWidth/2, ChunkStatics.ChunkWidth),
+                    Quaternion.identity,
+                    gameObject.transform
+                );
+                Vector2 chunkCoords = MathW.ChunkCoords(_id, new Vector2(x,z));
+                chunk.name = $"Chunk[{(int) chunkCoords.x}|{(int) chunkCoords.y}]";
+                
+                chunk.GetComponent<Chunk>().Init(100.5f, chunkCoords);
+                //Debug.Log("C|" + x + "|" + z + "|");
+                Chunks[x, z] = chunk;
+            }
         }
     }
 }
