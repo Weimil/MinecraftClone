@@ -17,23 +17,19 @@ namespace Level.RegionStuff
             _position = transform.position;
             _chunkPrefab = chunkPrefab;
             
-            // 15 - 5M
-            // 14 - 4M
-            // 13 - 3M
-            // 12 - 1M
-            // 11 - 500K
-            
             Chunks = new Chunk[RegionStatics.RegionSizeInChunks, RegionStatics.RegionSizeInChunks];
 
             for (int x = 0; x < Chunks.GetLength(0); x++)
             for (int z = 0; z < Chunks.GetLength(1); z++)
             {
+
                 Chunk chunk = Instantiate(
                     _chunkPrefab,
-                    MathW.ChunkSpawnCords(x, z, _position - Vector3.one * ChunkStatics.ChunkWidth/2, ChunkStatics.ChunkWidth),
+                    MathW.ChunkSpawnCords(x, z, _id),
                     Quaternion.identity,
                     gameObject.transform
                 );
+                
                 Vector2 chunkCoords = MathW.ChunkCoords(_id, new Vector2(x,z));
                 chunk.name = $"Chunk[{(int) chunkCoords.x}|{(int) chunkCoords.y}]";
                 

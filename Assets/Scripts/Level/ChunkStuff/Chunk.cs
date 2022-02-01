@@ -140,18 +140,18 @@ namespace Level.ChunkStuff
                 }
         }
 
-        private bool IsVisible3(int x, int y, int z, int faceIndex)
-        {
-            int checkX = x + (int) MeshStatics.FaceCheck[faceIndex].x;
-            int checkY = y + (int) MeshStatics.FaceCheck[faceIndex].y;
-            int checkZ = z + (int) MeshStatics.FaceCheck[faceIndex].z;
-
-            if (checkX >= 0 && checkX < ChunkStatics.ChunkWidth &&
-                checkY >= 0 && checkY < ChunkStatics.ChunkHeight &&
-                checkZ >= 0 && checkZ < ChunkStatics.ChunkWidth)
-                return Blocks[checkX, checkY, checkZ] == null;
-            return false;
-        }
+        // private bool IsVisible3(int x, int y, int z, int faceIndex)
+        // {
+        //     int checkX = x + (int) MeshStatics.FaceCheck[faceIndex].x;
+        //     int checkY = y + (int) MeshStatics.FaceCheck[faceIndex].y;
+        //     int checkZ = z + (int) MeshStatics.FaceCheck[faceIndex].z;
+        //
+        //     if (checkX >= 0 && checkX < ChunkStatics.ChunkWidth &&
+        //         checkY >= 0 && checkY < ChunkStatics.ChunkHeight &&
+        //         checkZ >= 0 && checkZ < ChunkStatics.ChunkWidth)
+        //         return Blocks[checkX, checkY, checkZ] == null;
+        //     return false;
+        // }
 
         private bool IsVisible(int x, int y, int z, int faceIndex)
         {
@@ -159,22 +159,22 @@ namespace Level.ChunkStuff
             int checkY = y + (int) MeshStatics.FaceCheck[faceIndex].y;
             int checkZ = z + (int) MeshStatics.FaceCheck[faceIndex].z;
 
-            if (checkX >= 0 && checkX < ChunkStatics.ChunkWidth &&
+            if (checkX >= 0 && checkX < ChunkStatics.ChunkWidth  &&
                 checkY >= 0 && checkY < ChunkStatics.ChunkHeight &&
-                checkZ >= 0 && checkZ < ChunkStatics.ChunkWidth)
+                checkZ >= 0 && checkZ < ChunkStatics.ChunkWidth
+            )
                 return Blocks[checkX, checkY, checkZ] == null;
-            // return false;
             return true;
             World world = GetComponentInParent<Region>().GetComponentInParent<World>(); 
             
             if (checkX < 0)
-                return world.GetChunk((int) _coord.x - 1, (int) _coord.y).Blocks[x, y, z] == null;
+                return world.GetChunk((int) _coord.x - 1, (int) _coord.y).Blocks[15, y, z] == null;
             if (checkX > ChunkStatics.ChunkWidth)
-                return world.GetChunk((int) _coord.x + 1, (int) _coord.y).Blocks[x, y, z] == null;
+                return world.GetChunk((int) _coord.x + 1, (int) _coord.y).Blocks[15, y, z] == null;
             if (checkY < 0)
-                return world.GetChunk((int) _coord.x, (int) _coord.y - 1).Blocks[x, y, z] == null;
+                return world.GetChunk((int) _coord.x, (int) _coord.y - 1).Blocks[15, y, z] == null;
             if (checkY > ChunkStatics.ChunkWidth)
-                return world.GetChunk((int) _coord.x, (int) _coord.y + 1).Blocks[x, y, z] == null;
+                return world.GetChunk((int) _coord.x, (int) _coord.y + 1).Blocks[15, y, z] == null;
 
             return false;
         }

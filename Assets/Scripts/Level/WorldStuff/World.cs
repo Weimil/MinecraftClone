@@ -12,8 +12,8 @@ namespace Level.WorldStuff
     {
         public static int Seed;
         public static Random Random;
-        public Chunk _chunkPrefab;
-        public Region _regionPrefab;
+        [SerializeField] private Chunk _chunkPrefab;
+        [SerializeField] private Region _regionPrefab;
         [SerializeField] private int manualSeed;
         private Dictionary<Vector2, Region> RegionDictionary { get; set; }
         private Region[,] Regions { get; set; }
@@ -46,7 +46,7 @@ namespace Level.WorldStuff
                 int nX = MathW.RegionCoord(x);
                 int nZ = MathW.RegionCoord(z);
                 region.name = $"Region[{nX}|{nZ}]";
-                region.GetComponent<Region>().Init(new Vector2(x, z), _chunkPrefab);
+                region.GetComponent<Region>().Init(new Vector2(nX, nZ), _chunkPrefab);
                 //Debug.Log("R|" + x + "|" + z + "|");
                 Regions[x, z] = region;
             }
@@ -61,7 +61,6 @@ namespace Level.WorldStuff
         
         public Chunk GetChunk(int x, int y)
         {
-            Debug.LogError("X: " + x + " Y: " + y);
             int size = RegionStatics.RegionSizeInChunks;
             int numRegions = size * Regions.GetLength(0);
 

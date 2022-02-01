@@ -1,4 +1,6 @@
 using System;
+using Level.ChunkStuff;
+using Level.RegionStuff;
 using UnityEngine;
 
 namespace Utils
@@ -61,17 +63,14 @@ namespace Utils
             return new Vector3(nX, 0, nZ);
         }
         
-        public static Vector3 ChunkSpawnCords(int x, int z, Vector3 offSet, int size)
+        public static Vector3 ChunkSpawnCords(int x, int z, Vector2 regionId)
         {
-            int nX = x / 2 * size + size / 2;
-            nX = x % 2 == 0 ? nX : nX * -1;
-            nX = nX + (int) offSet.x;
 
-            int nZ = z / 2 * size + size / 2;
-            nZ = z % 2 == 0 ? nZ : nZ * -1;
-            nZ = nZ + (int) offSet.z;
+            // regionId *= RegionStatics.RegionSizeInBlocks;
 
-            return new Vector3(nX, 0, nZ);
+            Vector2 tmpVector = ChunkCoords(regionId, new Vector2(x, z) * ChunkStatics.ChunkWidth);
+            
+            return new Vector3(tmpVector.x, 0, tmpVector.y);
         }
         
         public static int RegionCoord(int num)
@@ -83,7 +82,7 @@ namespace Utils
         {
             return (AbsVector(vectorA) + vectorB) * MinimalVector(vectorA);
         }
-        
+
         public static Vector2 MinimalVector(Vector2 vector)
         {
             // float x = vector.x != 0 ? vector.x > 0 ? 1 : -1 : 0;
