@@ -5,50 +5,64 @@ namespace Player
     [RequireComponent(typeof(CharacterController))]
     public class Movement : MonoBehaviour
     {
-        [SerializeField] private float fMovementSpeed = 5f;
-        [SerializeField] private float fRunMultiplier = 1.75f;
-        [SerializeField] private float fJumpPower = 3.5f;
-        [SerializeField] private float fFallModifier = 13f;
-        /*    (0_0)   */ private CharacterController characterController;
-        /*    (0_0)   */ private float fFallSpeed;
-        /*    (0_0)   */ private bool bIsRunning;
-        /*    (0_0)   */ private Vector3 v3Move;
-        
+        [SerializeField] private float movementSpeed = 5f;
+        [SerializeField] private float runMultiplier = 1.75f;
+        [SerializeField] private float jumpPower = 3.5f;
+        [SerializeField] private float fallModifier = 13f;
+        private bool _bIsRunning;
+        private CharacterController _characterController;
+        private float _fFallSpeed;
+        private Vector3 _v3Move;
+
         private void Start()
         {
-            characterController = GetComponent<CharacterController>();
+            _characterController = GetComponent<CharacterController>();
             Cursor.lockState = CursorLockMode.Locked;
         }
-        
+
         private void Update()
         {
-            v3Move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            
-            if (!characterController.isGrounded)
+            // TODO : Coyote Time
+            // https://www.youtube.com/watch?v=qf9vq-ru2Ks
+            // TODO : Inertia
+            // Player have Inertia in the air and if the player have jumped will continue moving although v3Move may be  (0, 0, 0) 
+            // TODO : Custom isGrounded
+            // Create an isGrounded method using a raycast
+            // TODO : FIX Diagonal movement
+            // It can be fixed by using the method Normalize from Vector3 but it do not work as intended
+
+            _v3Move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+            if (!_characterController.isGrounded)
             {
-                fFallSpeed += fFallModifier * Time.deltaTime;
-                characterController.stepOffset = 0f;
-                v3Move /= 1.6f;
+                _fFallSpeed += fallModifier * Time.deltaTime;
+                _characterController.stepOffset = 0f;
+                _v3Move /= 1.6f;
             }
             else if (Input.GetKey(KeyCode.Space))
             {
-                fFallSpeed = -fJumpPower;
+                _fFallSpeed = -jumpPower;
             }
             else
             {
-                bIsRunning = Input.GetKey(KeyCode.LeftControl);
-                characterController.stepOffset = 0.5f;
-                fFallSpeed = 0;
+                _bIsRunning = Input.GetKey(KeyCode.LeftControl);
+                _characterController.stepOffset = 0.5f;
+                _fFallSpeed = 0;
             }
-            
-            if (bIsRunning && v3Move.z > .1f)
-                v3Move *= Time.deltaTime * fMovementSpeed * fRunMultiplier;
-            else
-                v3Move *= Time.deltaTime * fMovementSpeed;
 
-            v3Move.y = -fFallSpeed * Time.deltaTime;
-            
-            characterController.Move(transform.TransformVector(v3Move));
+            if (_bIsRunning && _v3Move.z > .1f)
+                _v3Move *= Time.deltaTime * movementSpeed * runMultiplier;
+            else
+                _v3Move *= Time.deltaTime * movementSpeed;
+
+            _v3Move.y = -_fFallSpeed * Time.deltaTime;
+
+            _characterController.Move(transform.TransformVector(_v3Move));
+
+            _characterController.transform.position =
+                _characterController.transform.position.y < 0
+                    ? new Vector3(0, 150, 0)
+                    : _characterController.transform.position;
         }
     }
 }

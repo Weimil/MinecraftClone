@@ -4,23 +4,24 @@ namespace Player
 {
     public class RotationX : MonoBehaviour
     {
-        [SerializeField] private float fRotationX = 750f;
-        /*    (0_0)   */ private Vector3 v3Rotation;
+        [SerializeField] private float rotationX = 750f;
+        private Vector3 _rotation;
+
         private void Update()
         {
-            float fMouseX = -Input.GetAxis("Mouse Y");
-            
-            v3Rotation.x += fMouseX * Time.deltaTime * fRotationX;
-            v3Rotation.x = Mathf.Clamp(v3Rotation.x,-90f,90f);
-            
-            transform.localRotation = Quaternion.Euler(v3Rotation);
+            float mouseX = -Input.GetAxis("Mouse Y");
+
+            _rotation.x += mouseX * Time.deltaTime * rotationX;
+            _rotation.x = Mathf.Clamp(_rotation.x, -90f, 90f);
+
+            transform.localRotation = Quaternion.Euler(_rotation);
         }
 
         public Vector3 LookingAt()
         {
             return transform.forward;
         }
-        
+
         public Vector3 Position()
         {
             return transform.position;

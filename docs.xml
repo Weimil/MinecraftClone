@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Documentation>
+    <Scripts>
+        <Level>
+            <BlockStuff>
+                <MaterialStuff>
+                    
+                </MaterialStuff>
+                <MeshStuff>
+                    
+                </MeshStuff>
+                <BlockUtils>
+                    <Script name="IsValidPosition">
+                        <summary>
+                            Hey! You are reading this from an external XML File
+                        </summary>
+                    </Script>
+                    <Script name="ShouldRenderFace">
+                       <!--|                                             |-->
+                        <summary>
+                            <para>Method responsable of checking the block next</para>  
+                            to it
+                        </summary>
+                    </Script>
+                </BlockUtils>
+            </BlockStuff>
+        </Level>
+    </Scripts>
+    <Testting>
+        
+    </Testting>
+    
+</Documentation>

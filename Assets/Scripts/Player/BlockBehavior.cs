@@ -8,10 +8,12 @@ namespace Player
         {
             GetComponent<Renderer>().material.color = Color.black;
         }
+
         public void UnHighLight()
         {
             GetComponent<Renderer>().material.color = Color.white;
         }
+
         public void Break()
         {
             Destroy(gameObject);
