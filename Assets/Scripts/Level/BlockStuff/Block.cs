@@ -13,7 +13,7 @@ namespace Level.BlockStuff
             TextureMapIndex = textureMapIndex;
         }
 
-        public string Name 
+        private string Name 
         {
             get;
         }

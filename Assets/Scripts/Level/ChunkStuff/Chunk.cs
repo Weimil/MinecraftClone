@@ -17,7 +17,7 @@ namespace Level.ChunkStuff
     [RequireComponent(typeof(MeshFilter))]
     public class Chunk : MonoBehaviour
     {
-        private Block[,,] Blocks { get; set; }
+        private Block[,,] _blocks;
         private int[,] _heightMap;
         private MeshCollider _meshCollider;
         private MeshFilter _meshFilter;
@@ -31,7 +31,7 @@ namespace Level.ChunkStuff
 
         public void Init(float scale, Vector2 chunkCoord)
         {
-            Blocks = new Block[ChunkStatics.ChunkWidth, ChunkStatics.ChunkHeight, ChunkStatics.ChunkWidth];
+            _blocks = new Block[ChunkStatics.ChunkWidth, ChunkStatics.ChunkHeight, ChunkStatics.ChunkWidth];
             _meshRenderer = GetComponent<MeshRenderer>();
             _meshFilter = GetComponent<MeshFilter>();
             _meshCollider = GetComponent<MeshCollider>();
@@ -60,7 +60,7 @@ namespace Level.ChunkStuff
         
         private void CreateHeightMap()
         {
-            _heightMap = new int[ChunkStatics.ChunkWidth, ChunkStatics.ChunkWidth];
+            _heightMap = new int[ChunkStatics.ChunkWidth + 2, ChunkStatics.ChunkWidth + 2];
 
             for (int x = 0; x < _heightMap.GetLength(0); x++)
             for (int z = 0; z < _heightMap.GetLength(1); z++)
@@ -90,9 +90,9 @@ namespace Level.ChunkStuff
         private void PopulateChunk()
         {
             //_blocks = ChunkPopulation.FillWithAir(_blocks);
-            Blocks = ChunkPopulation.BedrockLayer(Blocks);
-            Blocks = ChunkPopulation.StoneLayer(Blocks, _heightMap);
-            Blocks = ChunkPopulation.DirtGrassLayer(Blocks, _heightMap);
+            _blocks = ChunkPopulation.BedrockLayer(_blocks);
+            _blocks = ChunkPopulation.StoneLayer(_blocks, _heightMap);
+            _blocks = ChunkPopulation.DirtGrassLayer(_blocks, _heightMap);
             /*
             for (int x = 0; x < _blocks.GetLength(0); x++)
             {
@@ -122,10 +122,10 @@ namespace Level.ChunkStuff
 
         private void RenderChunk()
         {
-            for (int x = 0; x < Blocks.GetLength(0); x++)
-            for (int y = 0; y < Blocks.GetLength(1); y++)
-            for (int z = 0; z < Blocks.GetLength(2); z++)
-                if (Blocks[x, y, z] != null)
+            for (int x = 0; x < _blocks.GetLength(0); x++)
+            for (int y = 0; y < _blocks.GetLength(1); y++)
+            for (int z = 0; z < _blocks.GetLength(2); z++)
+                if (_blocks[x, y, z] != null)
                     RenderBlock(x, y, z);
         }
 
@@ -134,9 +134,9 @@ namespace Level.ChunkStuff
             for (int i = 0; i < 6; i++)
                 if (IsVisible(x, y, z, i))
                 {
-                    _triangles.AddRange(Blocks[x, y, z].MeshType.GetTriangleListFromFace(i, _vertex.Count));
-                    _vertex.AddRange(Blocks[x, y, z].MeshType.GetVertexListFromFace(i, new Vector3(x, y, z)));
-                    _uvs.AddRange(Blocks[x, y, z].MeshType.GetUVsListFromFace(i, Blocks[x, y, z].TextureMapIndex));
+                    _triangles.AddRange(_blocks[x, y, z].MeshType.GetTriangleListFromFace(i, _vertex.Count));
+                    _vertex.AddRange(_blocks[x, y, z].MeshType.GetVertexListFromFace(i, new Vector3(x, y, z)));
+                    _uvs.AddRange(_blocks[x, y, z].MeshType.GetUVsListFromFace(i, _blocks[x, y, z].TextureMapIndex));
                 }
         }
 
@@ -163,23 +163,23 @@ namespace Level.ChunkStuff
                 checkY >= 0 && checkY < ChunkStatics.ChunkHeight &&
                 checkZ >= 0 && checkZ < ChunkStatics.ChunkWidth
             )
-                return Blocks[checkX, checkY, checkZ] == null;
+                return _blocks[checkX, checkY, checkZ] == null;
             return true;
             World world = GetComponentInParent<Region>().GetComponentInParent<World>(); 
             
             if (checkX < 0)
-                return world.GetChunk((int) _coord.x - 1, (int) _coord.y).Blocks[15, y, z] == null;
+                return world.GetChunk((int) _coord.x - 1, (int) _coord.y)._blocks[15, y, z] == null;
             if (checkX > ChunkStatics.ChunkWidth)
-                return world.GetChunk((int) _coord.x + 1, (int) _coord.y).Blocks[15, y, z] == null;
+                return world.GetChunk((int) _coord.x + 1, (int) _coord.y)._blocks[15, y, z] == null;
             if (checkY < 0)
-                return world.GetChunk((int) _coord.x, (int) _coord.y - 1).Blocks[15, y, z] == null;
+                return world.GetChunk((int) _coord.x, (int) _coord.y - 1)._blocks[15, y, z] == null;
             if (checkY > ChunkStatics.ChunkWidth)
-                return world.GetChunk((int) _coord.x, (int) _coord.y + 1).Blocks[15, y, z] == null;
+                return world.GetChunk((int) _coord.x, (int) _coord.y + 1)._blocks[15, y, z] == null;
 
             return false;
         }
         
-        private void CreateMesh()
+        private void CreateMesh() 
         {
             Mesh mesh = new Mesh
             {
@@ -189,7 +189,6 @@ namespace Level.ChunkStuff
                 uv = _uvs.ToArray()
             };
 
-            mesh.Optimize();
             mesh.RecalculateNormals();
 
             _meshFilter.mesh = mesh;

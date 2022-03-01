@@ -15,7 +15,7 @@ namespace Level.BlockStuff.MeshStuff
             _blockTriangle = blockTriangle;
         }
 
-        public List<Vector3> GetVertexListFromFace(int face, Vector3 pos)
+        public List<Vector3> GetVertexListFromFace(int face, Vector3 pos) 
         {
             List<Vector3> list = new List<Vector3>();
 
@@ -47,10 +47,10 @@ namespace Level.BlockStuff.MeshStuff
                     case 0:
                     case 1:
                         list.Add(new Vector2(
-                                _blockVertex[_blockTriangle[face][i]].x / TextureMap.TextureMapWidth +
-                                (float) 1 / TextureMap.TextureMapWidth * face,
-                                _blockVertex[_blockTriangle[face][i]].z / TextureMap.TextureMapHeight +
-                                (float) 1 / TextureMap.TextureMapHeight * textureIndex
+                                _blockVertex[_blockTriangle[face][i]].x / TextureMap.TextureMapWidth + 
+                                1f / TextureMap.TextureMapWidth * face,
+                                _blockVertex[_blockTriangle[face][i]].z / TextureMap.TextureMapHeight + 
+                                1f / TextureMap.TextureMapHeight * textureIndex
                             )
                         );
                         break;
@@ -58,10 +58,10 @@ namespace Level.BlockStuff.MeshStuff
                     case 2:
                     case 3:
                         list.Add(new Vector2(
-                                _blockVertex[_blockTriangle[face][i]].x / TextureMap.TextureMapWidth +
-                                (float) 1 / TextureMap.TextureMapWidth * face,
-                                _blockVertex[_blockTriangle[face][i]].y / TextureMap.TextureMapHeight +
-                                (float) 1 / TextureMap.TextureMapHeight * textureIndex
+                                _blockVertex[_blockTriangle[face][i]].x / TextureMap.TextureMapWidth + 
+                                1f / TextureMap.TextureMapWidth * face,
+                                _blockVertex[_blockTriangle[face][i]].y / TextureMap.TextureMapHeight + 
+                                1f / TextureMap.TextureMapHeight * textureIndex
                             )
                         );
                         break;
@@ -69,10 +69,10 @@ namespace Level.BlockStuff.MeshStuff
                     case 4:
                     case 5:
                         list.Add(new Vector2(
-                                _blockVertex[_blockTriangle[face][i]].z / TextureMap.TextureMapWidth +
-                                (float) 1 / TextureMap.TextureMapWidth * face,
-                                _blockVertex[_blockTriangle[face][i]].y / TextureMap.TextureMapHeight +
-                                (float) 1 / TextureMap.TextureMapHeight * textureIndex
+                                _blockVertex[_blockTriangle[face][i]].z / TextureMap.TextureMapWidth + 
+                                1f / TextureMap.TextureMapWidth * face,
+                                _blockVertex[_blockTriangle[face][i]].y / TextureMap.TextureMapHeight + 
+                                1f / TextureMap.TextureMapHeight * textureIndex
                             )
                         );
                         break;
